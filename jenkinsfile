@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'targetColleague', defaultValue: '', description: 'Target colleague email')
+        string(name: 'holidayAllowance', defaultValue: '', description: 'Holiday allowance in days')
+        string(name: 'requestorEmail', defaultValue: '', description: 'Requestor email')
+        string(name: 'fileUrl', defaultValue: '', description: 'File URL')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                    sh 'mvn test'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    def result = sh(script: "java -jar target/holidays.jar --targetColleague='${params.targetColleague}' --holidayAllowance='${params.holidayAllowance}' --requestorEmail='${params.requestorEmail}' --fileUrl='${params.fileUrl}'", returnStatus: true)
+
+                    echo "Yearly holiday allowance: ${params.holidayAllowance} days"
+                    echo "Colleague has taken ${params.targetColleague} days of holiday"
+                    echo "Colleague has ${result} days remaining"
+                }
+            }
+        }
+    }
+}
+
