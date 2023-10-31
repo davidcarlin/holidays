@@ -14,7 +14,7 @@ import java.util.Date;
 public class HolidaysServiceImpl implements HolidaysService {
 
     @Override
-    public String calculateHolidays(String targetColleague, int totalHolidayAllowance, String fileUrl) {
+    public String calculateHolidays(String colleagueName, int totalAllowance, String fileUrl) {
         try {
             String calendarData = readFile(fileUrl);
 
@@ -32,7 +32,7 @@ public class HolidaysServiceImpl implements HolidaysService {
             }
 
             for (String event : events) {
-                if (event.contains(targetColleague) && event.contains("CATEGORIES:leaves")) {
+                if (event.contains(colleagueName) && event.contains("CATEGORIES:leaves")) {
                     String[] lines = event.split("\n");
                     String startDateStr = null;
                     String endDateStr = null;
@@ -60,13 +60,11 @@ public class HolidaysServiceImpl implements HolidaysService {
                 }
             }
 
-            int daysRemaining = totalHolidayAllowance - daysTaken;
+            int daysRemaining = totalAllowance - daysTaken;
 
-            String result = "Yearly holiday allowance: " + totalHolidayAllowance + " days\n"
+            String result = "Yearly holiday allowance: " + totalAllowance + " days\n"
                     + "Colleague has taken " + daysTaken + " days of holiday\n"
                     + "Colleague has " + daysRemaining + " days remaining";
-
-            // Send result to the requestor's email (you need to implement this part)
 
             return result;
         } catch (IOException e) {

@@ -6,10 +6,10 @@
 <body>
 <h1>Holidays Calculator</h1>
 <form id="holidaysForm">
-    <label for="colleagueName">Colleague Name:</label>
+    <label for="colleagueName">Colleague name:</label>
     <input type="text" id="colleagueName" required><br><br>
 
-    <label for="totalAllowance">Total Allowance:</label>
+    <label for="totalAllowance">Total allowance:</label>
     <input type="number" id="totalAllowance" required><br><br>
 
     <label for="fileUrl">File URL:</label>
@@ -27,7 +27,7 @@
         const fileUrl = document.getElementById('fileUrl').value;
 
         // Construct the URL with query parameters
-        const url = `http://localhost:8081/calculate?targetColleague=${colleagueName}&totalHolidayAllowance=${totalAllowance}&fileUrl=${fileUrl}`;
+        const url = `http://localhost:8081/calculate?colleagueName=${colleagueName}&totalAllowance=${totalAllowance}&fileUrl=${fileUrl}`;
 
         // Make a POST request to your Spring Boot service
         fetch(url, {

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+@CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false")
 @RestController
 @RequestMapping("/")
 public class HolidaysController {
@@ -36,11 +37,11 @@ public class HolidaysController {
 
     @PostMapping("/calculate")
     public ResponseEntity<String> calculateHolidays(
-            @RequestParam String targetColleague,
-            @RequestParam int totalHolidayAllowance,
+            @RequestParam String colleagueName,
+            @RequestParam int totalAllowance,
             @RequestParam String fileUrl) {
 
-        String result = holidaysService.calculateHolidays(targetColleague, totalHolidayAllowance, fileUrl);
+        String result = holidaysService.calculateHolidays(colleagueName, totalAllowance, fileUrl);
         return ResponseEntity.ok(result);
     }
 }
