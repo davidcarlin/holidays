@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Holiday Tracker</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
@@ -22,32 +22,49 @@
 <div id="result"></div>
 
 <script>
-    document.getElementById('calculateButton').addEventListener('click', function () {
-        const colleagueName = document.getElementById('colleagueName').value;
-        const totalAllowance = document.getElementById('totalAllowance').value;
-        const fileUrl = document.getElementById('fileUrl').value;
+    // Check if the user's name is stored in Local Storage
+if (localStorage.hasOwnProperty('username')) {
+    const username = localStorage.getItem('username');
+    // Use the stored username in your app
+    document.getElementById('colleagueName').value = username;
+} else {
+    // If the user's name is not stored, prompt them to enter their name and store it in Local Storage
+    const username = prompt('Please enter your name:');
+    if (username) {
+        localStorage.setItem('username', username);
+        // Populate the "Colleague name" box with the entered name
+        document.getElementById('colleagueName').value = username;
+    }
+}
 
-        // Construct the URL with query parameters
-        const url = `http://localhost:8081/calculate?colleagueName=${colleagueName}&totalAllowance=${totalAllowance}&fileUrl=${fileUrl}`;
+// Add the event listener for the "Calculate" button
+document.getElementById('calculateButton').addEventListener('click', function () {
+    const colleagueName = document.getElementById('colleagueName').value;
+    const totalAllowance = document.getElementById('totalAllowance').value;
+    const fileUrl = document.getElementById('fileUrl').value;
 
-        // Make a POST request to your Spring Boot service
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.text())
-        .then(result => {
-            // Split the result by line breaks and display each part on a separate line
-            const resultParts = result.split('\n');
-            const resultHtml = resultParts.map(part => `<p>${part}</p>`).join('');
-            document.getElementById('result').innerHTML = resultHtml;
-        })
-        .catch(error => {
-            document.getElementById('result').textContent = 'An error occurred: ' + error.message;
-        });
+    // Construct the URL with query parameters
+    const url = `http://localhost:8081/calculate?colleagueName=${colleagueName}&totalAllowance=${totalAllowance}&fileUrl=${fileUrl}`;
+
+    // Make a POST request to your Spring Boot service
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.text())
+    .then(result => {
+        // Split the result by line breaks and display each part on a separate line
+        const resultParts = result.split('\n');
+        const resultHtml = resultParts.map(part => `<p>${part}</p>`).join('');
+        document.getElementById('result').innerHTML = resultHtml;
+    })
+    .catch(error => {
+        document.getElementById('result').textContent = 'An error occurred: ' + error.message;
     });
+});
+
 </script>
 </body>
 </html>
